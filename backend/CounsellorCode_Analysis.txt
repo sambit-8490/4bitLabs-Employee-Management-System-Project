@@ -1,0 +1,31 @@
+Code Analysis: Counsellor Controller and Service Layer
+
+1. CounsellorController.java
+This class acts as a REST API endpoint for counsellor-related operations in the Employee Management System.
+- Annotations: It is marked with `@RestController` and mapped to the base URL `/api/counsellor` using `@RequestMapping`.
+- Dependencies: It auto-wires the `CounsellorService` to handle the business logic.
+- Endpoints:
+  - POST `/api/counsellor/students`: This endpoint allows a counsellor to create a new student. It accepts a JSON payload corresponding to `StudentRequestDto`, validates it using `@Valid`, and delegates the creation to the `counsellorService`.
+  - The response is wrapped in a standardized `ApiResponse` containing the HTTP status (201 Created), a success message, and the resulting `StudentResponseDto`.
+
+2. CounsellorServiceImpl.java
+This class contains the actual business logic and implements the `CounsellorService` interface.
+- Dependencies: It uses `UserRepository`, `CounsellorProfileRepository`, and `StudentRepository` for database operations.
+- Methods:
+  - createCounsellor():
+    - Validation: Checks if an email already exists in the system to prevent duplicates.
+    - Admin Check: Verifies that the admin ID provided actually exists before associating the new counsellor with that admin.
+    - User Creation: Creates a base `User` entity with role `COUNSELLOR` and status `ACTIVE`.
+    - Profile Creation: Creates an associated `CounsellorProfile` with specific details like department, joining date, and salary.
+    - Returns a mapped `CounsellorResponseDto`.
+  - createStudent():
+    - Validation: Checks if the student's email already exists.
+    - Counsellor Check: Fetches the associated `CounsellorProfile`. It ensures the student is linked to a valid counsellor.
+    - Student Creation: Initializes a new `Student` entity sets their details (name, email, phone, status, joining date) and associates them with the retrieved counsellor profile.
+    - Returns a mapped `StudentResponseDto`.
+- Helper Methods: Uses private helper methods (`getStudentResponseDto` and `mapToResponseDto`) to cleanly map entities back into their respective Data Transfer Objects (DTOs) ensuring sensitive information like passwords isn't exposed.
+
+Overall Architectural Flow:
+The client sends an HTTP request -> Controller (`CounsellorController`) receives and validates the request DTO -> Service (`CounsellorServiceImpl`) processes the business logic, interacts with Database Repositories -> Service returns a Response DTO -> Controller wraps it in `ApiResponse` and sends it back to the client.
+
+The code is well-structured using the standard Spring Boot layered architecture (Controller -> Service -> Repository) and effectively uses DTOs for data transfer.

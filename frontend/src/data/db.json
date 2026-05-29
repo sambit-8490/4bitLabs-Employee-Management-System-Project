@@ -1,0 +1,216 @@
+{
+  "admin": [
+    {
+      "email": "admin@info.com",
+      "fullName": "Vaibhav Sathe",
+      "password": "admin12",
+      "role": "admin",
+      "username": "admin123",
+      "id": "40ab"
+    }
+  ],
+  "analyst": [
+    {
+      "name": "vaibhav",
+      "email": "vaibhav@gmail.com",
+      "password": "vaibhav",
+      "phone": "986789",
+      "status": "Inactive",
+      "joiningDate": "2026-02-20",
+      "salary": 7000,
+      "department": "CSE",
+      "role": "analyst",
+      "id": "aaf6"
+    }
+  ],
+  "trainer": [
+    {
+      "name": "Trainer 2",
+      "email": "trainer2@example.com",
+      "password": "trainer123",
+      "phone": "968796957",
+      "status": "Active",
+      "joiningDate": "",
+      "salary": 3000,
+      "role": "trainer",
+      "specialization": "rtrg",
+      "experienceYears": 0,
+      "qualification": "sfdsfc",
+      "id": "7b00"
+    },
+    {
+      "name": "TestTrainer123",
+      "email": "test123@test.com",
+      "password": "test123",
+      "phone": "",
+      "status": "Active",
+      "joiningDate": "",
+      "salary": 0,
+      "role": "trainer",
+      "specialization": "",
+      "experienceYears": 0,
+      "qualification": "fgfg",
+      "id": "ae65"
+    },
+    {
+      "id": "396b",
+      "name": "Sahil",
+      "email": "sahile@gmail.com",
+      "password": "sahile",
+      "phone": "23435345",
+      "status": "Active",
+      "joiningDate": "2026-03-05",
+      "salary": 33400,
+      "specialization": "Spring boot",
+      "experienceYears": 2,
+      "qualification": "Btech",
+      "role": "trainer"
+    },
+    {
+      "name": "sowmya",
+      "email": "sowmya@gmail.com",
+      "password": "sowmya12",
+      "phone": "918233567",
+      "status": "Active",
+      "joiningDate": "2026-03-12",
+      "salary": 30000,
+      "role": "trainer",
+      "specialization": "java",
+      "experienceYears": 3,
+      "qualification": "mca",
+      "id": "2fb5"
+    }
+  ],
+  "counsellors": [
+    {
+      "name": "Vaibhav",
+      "email": "vaibhv@gam.cmd",
+      "password": "dsxcdsxc",
+      "phone": "09iu654",
+      "status": "Inactive",
+      "joiningDate": "2026-02-12",
+      "salary": 343400,
+      "role": "counsellor",
+      "department": "",
+      "id": "e281"
+    }
+  ],
+  "batches": [
+    {
+      "id": "4976",
+      "name": "Batch-02",
+      "course": "Python",
+      "trainerId": "7b00",
+      "analystId": "aaf6",
+      "startDate": "2026-01-28",
+      "endDate": "2026-03-08",
+      "status": "active"
+    },
+    {
+      "id": "72f1",
+      "name": "B2",
+      "course": "C++",
+      "trainerId": "396b",
+      "analystId": "aaf6",
+      "startDate": "2026-03-05",
+      "endDate": "2026-07-04",
+      "status": "active"
+    },
+    {
+      "id": "c90d",
+      "name": "BB23",
+      "course": "Data Science",
+      "trainerId": "ae65",
+      "analystId": "",
+      "startDate": "2026-03-11",
+      "endDate": "2026-04-05",
+      "status": "active"
+    },
+    {
+      "id": "e5ac",
+      "name": "iii",
+      "course": "jnjhh",
+      "trainerId": "396b",
+      "analystId": "",
+      "startDate": "2026-03-04",
+      "endDate": "2026-03-27",
+      "status": "active"
+    },
+    {
+      "id": "1f18",
+      "name": "BBB",
+      "course": "c",
+      "trainerId": "ae65",
+      "analystId": "aaf6",
+      "startDate": "2026-02-23",
+      "endDate": "2026-04-05",
+      "status": "completed"
+    }
+  ],
+  "students": [
+    {
+      "id": "d5cc",
+      "name": "sahil aglawe",
+      "email": "sahil@gmail.com",
+      "phone": "89798789345",
+      "status": "active",
+      "joiningDate": "2026-02-10",
+      "counsellorId": "e281"
+    },
+    {
+      "id": "56fc",
+      "name": "vaibhav",
+      "email": "vaibhav@gmail.com",
+      "phone": "32342432",
+      "status": "active",
+      "joiningDate": "2026-03-05",
+      "counsellorId": "e281"
+    },
+    {
+      "id": "dab0",
+      "name": "prattik",
+      "email": "p@p.com",
+      "phone": "546457457",
+      "status": "active",
+      "joiningDate": "2026-03-21",
+      "counsellorId": "e281"
+    }
+  ],
+  "batchProgress": [
+    {
+      "id": "a01f",
+      "batchId": "4976",
+      "trainerId": "7b00",
+      "title": "fjgjkfgjkdnfjk",
+      "description": "dmmnfjkdn",
+      "documentName": "ResumeVaibhav - Mern.pdf",
+      "documentData": "",
+      "sessionNumber": 1,
+      "topicCovered": "",
+      "createdAt": "2026-03-05T06:25:12.873Z"
+    }
+  ],
+  "assignments": [
+    {
+      "id": "34dc",
+      "studentId": "d5cc",
+      "batchId": "4976",
+      "assignedDate": "2026-02-10",
+      "status": "active"
+    },
+    {
+      "id": "f8c7",
+      "studentId": "dab0",
+      "batchId": "e5ac",
+      "assignedDate": "2026-03-06",
+      "status": "active"
+    },
+    {
+      "id": "b464",
+      "studentId": "56fc",
+      "batchId": "c90d",
+      "assignedDate": "2026-03-06",
+      "status": "active"
+    }
+  ]
+}

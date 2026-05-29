@@ -1,0 +1,17 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background: indigo-600 (#4F46E5) rounded rectangle -->
+  <rect width="32" height="32" rx="6" fill="#4F46E5"/>
+  
+  <!-- Chip outline (white) -->
+  <rect x="5" y="5" width="22" height="22" rx="2" stroke="white" stroke-width="2" fill="none"/>
+  
+  <!-- Simple grid lines (plus sign) -->
+  <line x1="16" y1="5" x2="16" y2="27" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <line x1="5" y1="16" x2="27" y2="16" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Four corner connection dots -->
+  <circle cx="8" cy="8" r="2" fill="white"/>
+  <circle cx="24" cy="8" r="2" fill="white"/>
+  <circle cx="8" cy="24" r="2" fill="white"/>
+  <circle cx="24" cy="24" r="2" fill="white"/>
+</svg>

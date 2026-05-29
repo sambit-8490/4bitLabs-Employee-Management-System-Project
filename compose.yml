@@ -1,0 +1,54 @@
+version: "3.8"
+services:
+  db:
+    image: mysql:8.0
+    container_name: 4bitlabs-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: yourpassword
+      MYSQL_DATABASE: employee_management
+      MYSQL_ROOT_HOST: "%"
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-pyourpassword"]
+      interval: 5s
+      retries: 10
+      timeout: 5s
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: 4bitlabs-backend
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      PORT: 8082
+      DB_URL: jdbc:mysql://db:3306/employee_management
+      DB_USERNAME: root
+      DB_PASSWORD: yourpassword
+      CLOUDINARY_CLOUD_NAME: coderking
+      CLOUDINARY_API_KEY: 894478555391115
+      CLOUDINARY_API_SECRET: gNOzQfa7BRLtN0MibIdiZHyfQnU
+      JWT_SECRET: "NGJpdExhYnMtc3VwZXItc2VjcmV0LWp3dC1rZXktMjAyNC1zZWN1cmUhIQ=="
+      CORS_ALLOWED_ORIGINS: http://localhost:5173
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8082:8082"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: 4bitlabs-frontend
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
