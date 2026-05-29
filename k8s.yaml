@@ -1,0 +1,247 @@
+
+# ─────────────────────────────────────────────
+# 4bitLabs Employee Management System
+# Kubernetes Manifests (Minikube / NodePort)
+# Apply: kubectl apply -f k8s.yaml
+# ─────────────────────────────────────────────
+
+# ── ConfigMap (non-sensitive config) ──────────
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  SPRING_PROFILES_ACTIVE: "dev"
+  PORT: "8082"
+  DB_URL: "jdbc:mysql://db:3306/employee_management"
+  DB_USERNAME: "root"
+  MYSQL_DATABASE: "employee_management"
+  APP_CORS_ALLOWED_ORIGINS: "http://192.168.49.2:30573"
+  VITE_API_URL: "http://192.168.49.2:30082/api"
+
+---
+
+# ── Secret (sensitive values) ─────────────────
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secrets
+type: Opaque
+stringData:
+  DB_PASSWORD: "yourpassword"
+  CLOUDINARY_CLOUD_NAME: "coderking"
+  CLOUDINARY_API_KEY: "894478555391115"
+  CLOUDINARY_API_SECRET: "gNOzQfa7BRLtN0MibIdiZHyfQnU"
+  JWT_SECRET: "NGJpdExhYnMtc3VwZXItc2VjcmV0LWp3dC1rZXktMjAyNC1zZWN1cmUhIQ=="
+
+---
+
+# ── MySQL PersistentVolumeClaim ────────────────
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+
+# ── MySQL Deployment ───────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          ports:
+            - containerPort: 3306
+
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: DB_PASSWORD
+
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: MYSQL_DATABASE
+
+            - name: MYSQL_ROOT_HOST
+              value: "%"
+
+          volumeMounts:
+            - name: mysql-storage
+              mountPath: /var/lib/mysql
+
+          readinessProbe:
+            exec:
+              command:
+                - mysqladmin
+                - ping
+                - -h
+                - localhost
+
+            initialDelaySeconds: 20
+            periodSeconds: 5
+            failureThreshold: 10
+
+      volumes:
+        - name: mysql-storage
+          persistentVolumeClaim:
+            claimName: mysql-pvc
+
+---
+
+# ── MySQL Service (ClusterIP) ──────────────────
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+
+spec:
+  selector:
+    app: mysql
+
+  ports:
+    - port: 3306
+      targetPort: 3306
+
+---
+
+# ── Backend Deployment ─────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: backend
+
+  template:
+    metadata:
+      labels:
+        app: backend
+
+    spec:
+      initContainers:
+        - name: wait-for-mysql
+          image: busybox
+
+          command:
+            - sh
+            - -c
+            - |
+              until nc -z db 3306; do
+                echo "Waiting for MySQL...";
+                sleep 3;
+              done;
+
+              echo "MySQL is ready!"
+
+      containers:
+        - name: backend
+          image: 4bit-backend:latest
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - containerPort: 8082
+
+          envFrom:
+            - configMapRef:
+                name: app-config
+
+            - secretRef:
+                name: app-secrets
+
+---
+
+# ── Backend Service (NodePort) ─────────────────
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+
+spec:
+  type: NodePort
+
+  selector:
+    app: backend
+
+  ports:
+    - port: 8082
+      targetPort: 8082
+      nodePort: 30082
+
+---
+
+# ── Frontend Deployment ────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: frontend
+
+  template:
+    metadata:
+      labels:
+        app: frontend
+
+    spec:
+      containers:
+        - name: frontend
+          image: 4bit-frontend:latest
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - containerPort: 5173
+
+          envFrom:
+            - configMapRef:
+                name: app-config
+
+---
+
+# ── Frontend Service (NodePort) ────────────────
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+
+spec:
+  type: NodePort
+
+  selector:
+    app: frontend
+
+  ports:
+    - port: 5173
+      targetPort: 5173
+      nodePort: 30573
